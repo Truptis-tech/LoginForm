@@ -1,10 +1,21 @@
-﻿Frontend/node_modules/
+﻿# Frontend dependencies
+Frontend/node_modules/
+
+# Python virtual environment
 Backend/venv/
+
+# Python cache
 Backend/__pycache__/
+
+# Environment variables and secrets
 .env
 .env.*
 Backend/.env
 Frontend/.env
+
+# Local databases
 Backend/users.db
 *.pyc
+
+# ZIP archives
 *.zip 
