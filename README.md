@@ -19,16 +19,15 @@ The project separates the frontend and backend to make the application easier to
 
 🛠️ Technologies Used
 Technology          |               Purpose
-React.js            |           Frontend user interface
-JavaScript          |           Frontend application logic
+React.js            |           Building the frontend user interface
+JavaScript          |           Frontend functionality and interactions
+HTML & CSS          |           Page structure and styling
 Python              |           Backend programming
-Flask               |           Backend web framework and API
-SQLite              |           Database, if used by the application
-SQL                 |           Database schema
-npm                 |           Frontend dependency management
-Git and GitHub      |           Version control and code hosting
-
-Frontend dependencies: "react-scripts" 5.0.1 and "web-vitals" 2.1.4.
+Flask               |           Backend web framework and API development 
+SQLite              |           Database for storing application data
+SQL                 |           Database queries and operations
+npm                 |           Frontend package management
+Git and GitHub      |           Version control and project hosting
 
 📂 Project Structure
 
