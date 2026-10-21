@@ -157,4 +157,5 @@ GitHub: "https://github.com/Truptis-tech" (https://github.com/Truptis-tech)
 
 📄 License
 No license has been specified for this.
+
 This project is intended for learning and development. Verify the setup instructions and security practices before using it in production.
