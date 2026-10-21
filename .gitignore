@@ -7,6 +7,4 @@ Backend/.env
 Frontend/.env
 Backend/users.db
 *.pyc
-'nloginform.zip
-'nloginform.zip
-'nloginform.zip
+*.zip 
