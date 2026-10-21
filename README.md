@@ -130,10 +130,9 @@ Screenshots attached:
 1. Login page
 2. Login validation or error messages
 3. Successful login flow
-
-  1. <img width="1920" height="1080" alt="Screenshot (89)" src="https://github.com/user-attachments/assets/7b3ed9b8-837f-4ab7-ae16-cede9fafcc4b" />
-  2. <img width="1920" height="1080" alt="Screenshot (91)" src="https://github.com/user-attachments/assets/83c1eef1-935e-428d-adbc-b135f04eb31c" />
-  3. <img width="1920" height="1080" alt="Screenshot (90)" src="https://github.com/user-attachments/assets/1236b011-4488-4cf3-aefb-18145acf8fab" />
+<img width="1600" height="832" alt="Image 3" src="https://github.com/user-attachments/assets/daaa1689-a13e-417a-90a3-9df044b3aef3" />
+<img width="1600" height="832" alt="Image 1" src="https://github.com/user-attachments/assets/8a47b3d0-d694-4193-bea7-78d3dd108540" />
+<img width="1568" height="788" alt="Image 2" src="https://github.com/user-attachments/assets/ec687778-bc57-41cb-b8ce-02fe861f32fe" />
 
 
 🔐 Security
