@@ -1,0 +1,204 @@
+{
+  "info": {
+    "name": "AdminPortal API Collection",
+    "description": "API tests for Flask backend. Base URL: http://localhost:5000",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [{ "key": "base", "value": "http://localhost:5000" }],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": { "method": "GET", "url": "{{base}}/health" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200 OK', () => pm.response.to.have.status(200));",
+        "pm.test('connected=true', () => pm.expect(pm.response.json().connected).to.be.true);"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Login - Valid",
+      "request": {
+        "method": "POST", "url": "{{base}}/api/auth/login",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"email\":\"truptilakshmi.tm@gmail.com\",\"password\":\"trupti@2005\"}" }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200 OK', () => pm.response.to.have.status(200));",
+        "pm.test('role=Super Admin', () => pm.expect(pm.response.json().role).to.eql('Super Admin'));",
+        "pm.collectionVariables.set('uid', pm.response.json().id);"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Login - Wrong Password",
+      "request": {
+        "method": "POST", "url": "{{base}}/api/auth/login",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"email\":\"alice@gmail.com\",\"password\":\"wrong\"}" }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('401 Unauthorized', () => pm.response.to.have.status(401));"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Login - Missing Fields",
+      "request": {
+        "method": "POST", "url": "{{base}}/api/auth/login",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"password\":\"abc\"}" }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('400 Bad Request', () => pm.response.to.have.status(400));"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Login - Inactive Account",
+      "request": {
+        "method": "POST", "url": "{{base}}/api/auth/login",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"email\":\"carol@gmail.com\",\"password\":\"password123\"}" }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('403 Forbidden', () => pm.response.to.have.status(403));"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Login - Pending Account",
+      "request": {
+        "method": "POST", "url": "{{base}}/api/auth/login",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"email\":\"emma@gmail.com\",\"password\":\"password123\"}" }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('403 Forbidden', () => pm.response.to.have.status(403));",
+        "pm.test('pending message', () => pm.expect(pm.response.json().message).to.include('pending'));"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Register - Valid",
+      "request": {
+        "method": "POST", "url": "{{base}}/api/auth/register",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"name\":\"Test User\",\"email\":\"testuser99@example.com\",\"password\":\"pass123\",\"dept\":\"HR\"}" }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('201 Created', () => pm.response.to.have.status(201));",
+        "pm.test('status=Pending', () => pm.expect(pm.response.json().user.status).to.eql('Pending'));",
+        "pm.collectionVariables.set('reg_id', pm.response.json().user.id);"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Register - Duplicate Email",
+      "request": {
+        "method": "POST", "url": "{{base}}/api/auth/register",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"name\":\"Dup\",\"email\":\"alice@gmail.com\",\"password\":\"pass123\"}" }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('400 Duplicate', () => pm.response.to.have.status(400));"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Register - Short Password",
+      "request": {
+        "method": "POST", "url": "{{base}}/api/auth/register",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"name\":\"Short\",\"email\":\"short@example.com\",\"password\":\"123\"}" }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('400 Short Password', () => pm.response.to.have.status(400));"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Get All Users",
+      "request": { "method": "GET", "url": "{{base}}/api/users" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200 OK', () => pm.response.to.have.status(200));",
+        "pm.test('is array', () => pm.expect(pm.response.json()).to.be.an('array'));",
+        "pm.test('has users', () => pm.expect(pm.response.json().length).to.be.gte(1));"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Create User - Valid",
+      "request": {
+        "method": "POST", "url": "{{base}}/api/users",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"name\":\"Priya Sharma\",\"email\":\"priya.test99@company.com\",\"role\":\"Editor\",\"status\":\"Active\",\"dept\":\"Marketing\"}" }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('201 Created', () => pm.response.to.have.status(201));",
+        "pm.test('avatar=PS', () => pm.expect(pm.response.json().avatar).to.eql('PS'));",
+        "pm.collectionVariables.set('new_id', pm.response.json().id);"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Create User - Duplicate Email",
+      "request": {
+        "method": "POST", "url": "{{base}}/api/users",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"name\":\"Dup\",\"email\":\"bob@yahoo.com\"}" }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('400 Duplicate', () => pm.response.to.have.status(400));"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Update User - Valid",
+      "request": {
+        "method": "PUT", "url": "{{base}}/api/users/{{new_id}}",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"role\":\"Super Admin\",\"dept\":\"Leadership\"}" }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200 OK', () => pm.response.to.have.status(200));",
+        "pm.test('role updated', () => pm.expect(pm.response.json().role).to.eql('Super Admin'));"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Update User - Not Found",
+      "request": {
+        "method": "PUT", "url": "{{base}}/api/users/99999",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"role\":\"Viewer\"}" }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('404 Not Found', () => pm.response.to.have.status(404));"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Delete User - Valid",
+      "request": { "method": "DELETE", "url": "{{base}}/api/users/{{new_id}}" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200 Deleted', () => pm.response.to.have.status(200));"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Delete User - Not Found",
+      "request": { "method": "DELETE", "url": "{{base}}/api/users/99999" },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('404 Not Found', () => pm.response.to.have.status(404));"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Bulk Delete - Valid",
+      "request": {
+        "method": "POST", "url": "{{base}}/api/users/bulk-delete",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"ids\":[{{reg_id}}]}" }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('200 OK', () => pm.response.to.have.status(200));",
+        "pm.test('has deleted count', () => pm.expect(pm.response.json().message).to.include('deleted'));"
+      ], "type": "text/javascript" }}]
+    },
+    {
+      "name": "Bulk Delete - Empty IDs",
+      "request": {
+        "method": "POST", "url": "{{base}}/api/users/bulk-delete",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\"ids\":[]}" }
+      },
+      "event": [{ "listen": "test", "script": { "exec": [
+        "pm.test('400 Bad Request', () => pm.response.to.have.status(400));"
+      ], "type": "text/javascript" }}]
+    }
+  ]
+}

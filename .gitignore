@@ -1,0 +1,12 @@
+﻿Frontend/node_modules/
+Backend/venv/
+Backend/__pycache__/
+.env
+.env.*
+Backend/.env
+Frontend/.env
+Backend/users.db
+*.pyc
+'nloginform.zip
+'nloginform.zip
+'nloginform.zip
